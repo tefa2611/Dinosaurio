@@ -49,9 +49,15 @@ function start(){
     contenedor = document.querySelector(".contenedor")
     textoPuntaje = document.querySelector(".puntaje")
     dino = document.querySelector(".dino")
+
+    document.addEventListener("keydown" , HandleKeyDown)
 }
 function update(){
     moverSuelo()
+
+    MoverDino()
+    
+    velY -= gravedad * deltaTime;
 }
 
 function moverSuelo(){
@@ -61,4 +67,34 @@ function moverSuelo(){
 
 function calcularDesplazamiento(){
     return velEscenario * deltaTime * gameVel
+}
+function HandleKeyDown(event){
+    if(event.keyCode == 32){
+        Saltar()
+    }
+}
+
+
+function Saltar(){
+    if(dinoPosY === sueloY){
+        saltando = true
+        velY = impulso
+        dino.classList.remove("dino-corriendo")
+    }
+}
+function MoverDino(){
+    dinoPosY += velY * deltaTime
+
+    if(dinoPosY < sueloY){
+        TocarSuelo()
+    }
+    dino.style.bottom = dinoPosY+"px"
+}
+function TocarSuelo(){
+    dinoPosY = sueloY;
+    velY = 0;
+    if(saltando){
+        dino.classList.add("dino-corriendo")
+    }
+    saltando = false;
 }
